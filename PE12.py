@@ -24,37 +24,61 @@ We can see that 28 is the first triangle number to have over five divisors.
 What is the value of the first triangle number to have 
 over five hundred divisors?
 """
+import math
+
+def numPrimeDivisors(n):
+    for i in range(2, int(math.sqrt(n))+1):
+        if n%i is 0 and n is not 2:
+            return numPrimeDivisors(i) + numPrimeDivisors(n/i)
+    return 1
+
 def numDivisors(n):
     count = 0
-    for i in range(1, n):
+    for i in range(1,int(math.sqrt(n))):
 	if n%i == 0:
 	    count += 1
+    count *= 2
+    if count%math.sqrt(n) == 0:
+        count += 1
     return count
 
-def minTriNum(max_num_divisors):
+"""
+With the above recursive definition for finding the number of terms in
+a numbers prime factorization, I can quickly shift through the triangular
+numbers and pick out ones that have a chance of being divisible by 500 terms.
+However, it is still not fast enough, taking
+"""
+def minTriNum(approx, max_num, max_div):
     tri_num = 1
     count = 1
-    while numDivisors(tri_num) <= max_num_divisors:
+    while tri_num < max_num:
+        prime_num = numPrimeDivisors(tri_num)
+        if prime_num >= approx:
+            num_div = numDivisors(tri_num)
+            if num_div >= max_div:
+                print("FOUND")
+            print(str(tri_num) + ": " + str(numDivisors(tri_num)))
 	tri_num += count
 	count += 1 
-    return numDivisors(tri_num)
 
-"""
-My program currently takes forever to run, though I believe if I
-had forever to wait it would probably get to the correct answer eventually.
-Obviously, since I do not have forever, (It turns out a number with over
-500 divisors is going to be very large) I need an implementation that isn't
-O(2**n). It might be wiser to first find numbers that have over 500 divisors,
-and then check if any of them happen to be triangular numbers; though,
-I'm guessing I would run into similar problems. I have an inkling that I can
-find a way to use numDivisors() recursively. I've spent the last hour in front
-of a newspaper with a sharpie trying to remember how one would calculate
-the number of divisors a number would have based on its prime factorization,
-and hopefully some insight will be born of that.
-"""
+def isTriNum(n):
+    temp = n
+    count = 1
+    while temp > 0:
+        temp -= count
+        count += 1
+        if temp == 0:
+            return True
+    return False
 
 def main():
-    number_of_divisors = 500
-    print(minTriNum(number_of_divisors))
+    print(isTriNum(55))
+    print(isTriNum(111))
+    print(numDivisors(28))
+    print(numDivisors(100))
+    print(numPrimeDivisors(100))
+    print(numPrimeDivisors(256))
+    print(numPrimeDivisors(346))
+    minTriNum(15, 100000000000, 500)
 
 main()
