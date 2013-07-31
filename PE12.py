@@ -43,11 +43,6 @@ def numDivisors(n):
     return count
 
 """
-With the above recursive definition for finding the number of terms in
-a numbers prime factorization, I can quickly shift through the triangular
-numbers and pick out ones that have a chance of being divisible by 500 terms.
-However, it is still not fast enough, taking
-"""
 def minTriNum(approx, max_num, max_div):
     tri_num = 1
     count = 1
@@ -57,6 +52,7 @@ def minTriNum(approx, max_num, max_div):
             num_div = numDivisors(tri_num)
             if num_div >= max_div:
                 print("FOUND")
+                return
             print(str(tri_num) + ": " + str(numDivisors(tri_num)))
 	tri_num += count
 	count += 1 
@@ -79,6 +75,6 @@ def main():
     print(numPrimeDivisors(100))
     print(numPrimeDivisors(256))
     print(numPrimeDivisors(346))
-    minTriNum(15, 100000000000, 500)
+    minTriNum(9, 100000000000, 500)
 
 main()
