@@ -42,7 +42,6 @@ def numDivisors(n):
         count += 1
     return count
 
-"""
 def minTriNum(approx, max_num, max_div):
     tri_num = 1
     count = 1
